@@ -5,12 +5,15 @@ val rdd2 = rdd1.map( line => line.split(' ') (6) )
 val rdd3 = rdd2.map( file => file.split('.') (file.split('.').length-1) )
 val rdd4 = rdd3.map( suffix => (suffix,1) )
 val rdd5 = rdd4.reduceByKey( (v1,v2) => v1+v2 )
-rdd5.saveAsTextFile("/loudacre/filetypecounts-spark")
+val rdd6 = rdd5.map( pair => pair._1 + "\t" + pair._2 )
+val rdd7 = rdd6.repartition(1)
+
+rdd7.saveAsTextFile("/loudacre/filetypecounts-spark")
 
 // To see the output on console use:
-// rdd5.take(10)
+// rdd7.take(10)
 
-// To read from loacl file system:
+// To read from local file system:
 // val myRDD = sc.textFile("file:/home/training/myfile.txt")
 
 // To eliminate INFO messages from the shell console, copy 
