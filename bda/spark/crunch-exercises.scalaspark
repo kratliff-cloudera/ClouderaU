@@ -1,0 +1,21 @@
+//Scala Spark replacement for Crunch Exercise 1
+
+val rdd1 = sc.textFile("/loudacre/allweblogs.log") 
+val rdd2 = rdd1.map( line => line.split(' ') (6) )
+val rdd3 = rdd2.map( file => file.split('.') (file.split('.').length-1) )
+val rdd4 = rdd3.map( suffix => (suffix,1) )
+val rdd5 = rdd4.reduceByKey( (v1,v2) => v1+v2 )
+rdd5.saveAsTextFile("/loudacre/filetypecounts-spark")
+
+// To see the output on console use:
+// rdd5.take(10)
+
+// To read from loacl file system:
+// val myRDD = sc.textFile("file:/home/training/myfile.txt")
+
+// To eliminate INFO messages from the shell console, copy 
+//    /etc/spark/conf/log4j.properties.template
+// to 
+//    /home/training/log4j.properties
+// then edit to change all INFO settings to WARN
+// then restart the Spark shell.
